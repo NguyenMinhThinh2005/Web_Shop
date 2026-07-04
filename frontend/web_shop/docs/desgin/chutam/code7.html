@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chú Tám Tân Xe - Storefront Mobile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffddb8",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-variant": "#d3e4fe",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#3b4358",
+                        "outline": "#867461",
+                        "surface-container-high": "#dce9ff",
+                        "primary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#00714d",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#565e74",
+                        "on-surface-variant": "#534434",
+                        "background": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-tint": "#855300",
+                        "on-primary-fixed": "#2a1700",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-container": "#f59e0b",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "secondary-container": "#6cf8bb",
+                        "inverse-primary": "#ffb95f",
+                        "surface": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#d8c3ad",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#653e00",
+                        "on-background": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "surface-container": "#e5eeff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "inverse-surface": "#213145",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-container": "#613b00",
+                        "primary": "#855300",
+                        "tertiary-container": "#a9b0c9",
+                        "on-tertiary-fixed-variant": "#3f465c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "sm": "12px",
+                        "md": "16px",
+                        "base": "4px",
+                        "xl": "40px",
+                        "gutter": "20px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Be Vietnam Pro"],
+                        "headline-lg-mobile": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for horizontal lists */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col relative pb-28 md:pb-0 selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar (Mobile Header) -->
+<header class="bg-surface/95 backdrop-blur-md dark:bg-on-background/95 shadow-sm dark:bg-surface-container/95 docked full-width top-0 sticky z-50 border-b border-outline-variant/30 transition-all duration-300">
+<div class="flex justify-between items-center px-4 md:px-lg py-3 w-full max-w-container-max mx-auto z-50">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed leading-tight tracking-tight">Chú Tám Tán Xe</span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant/70">Premium Parts</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative w-40 md:w-48">
+<input class="w-full bg-surface-container-low/50 border border-outline-variant/50 rounded-full py-1.5 px-4 pl-9 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-on-surface transition-all py-2.5" placeholder="Tìm phụ tùng..." type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[18px]">search</span>
+</div>
+<button class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary dark:text-primary-fixed active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">call</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-4 md:px-lg py-5 md:py-xl flex flex-col md:flex-row gap-lg">
+<!-- Mobile Content -->
+<div class="w-full flex flex-col gap-6">
+<!-- Compact Hero / Promotion Banner -->
+<section class="w-full rounded-2xl overflow-hidden relative shadow-md bg-surface-container-highest group">
+<div class="bg-cover bg-center w-full h-48 md:h-64 transition-transform duration-700 group-hover:scale-105" data-alt="A dynamic, high-quality photograph of premium motorcycle parts neatly arranged on a clean, light-colored workbench. The lighting is bright and professional, highlighting the metallic textures of a shiny new suspension spring, a pristine brake caliper, and a sealed bottle of high-end motor oil. The scene uses a warm color palette with accents of amber and subtle green to evoke trust and performance. The aesthetic is clean, corporate modern, and highly detailed, perfectly suited for a specialist motorcycle parts store's hero banner." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDi7cbLnbejuW9xiTNg73m8RI0or9DIOJlZJ5XXlBbmdhHKZkTCHu1O_JhgGr2AAh-ItgwkvWfM0zeEhZzPvWRAsTgCrTPqUz5haXwmqINXk40I-fa7Qq3VwTh1dMdYdWrDDfRWLG6S_DKfjeo9LpSeniH_oM_NQe_WiXshyw1tln6vXhzKl24moz54TSlKenVMuMGOTA0OZZ4nUALvYyBlsicprZZLxPlDlHUnHOgf-ZcHUJBzitZmuRMNDuMXl6qQW98kUcaVHXA')"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-on-background/90 via-on-background/60 to-transparent p-5 md:p-8 flex flex-col justify-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-white mb-1.5 drop-shadow-md">Phụ Tùng Cao Cấp</h2>
+<p class="font-body-md text-sm text-surface-variant/90 mb-5 font-medium max-w-[70%]">Nhập khẩu chính hãng 100%. Bảo hành 1 đổi 1.</p>
+<button class="bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md py-2.5 px-6 rounded-full self-start shadow-lg shadow-primary/30 active:scale-95 transition-all flex items-center gap-2">
+<span>Khám Phá Ngay</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Trust Badges (Compact) -->
+<section class="flex justify-between items-center bg-surface p-4 rounded-2xl shadow-sm border border-outline-variant/20">
+<div class="flex flex-col items-center gap-1.5 text-center flex-1">
+<div class="w-8 h-8 rounded-full bg-secondary-container/30 flex items-center justify-center mb-0.5">
+<span class="material-symbols-outlined text-secondary-container text-[18px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="font-label-sm text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Chính hãng</span>
+</div>
+<div class="w-px h-10 bg-outline-variant/30"></div>
+<div class="flex flex-col items-center gap-1.5 text-center flex-1">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center mb-0.5">
+<span class="material-symbols-outlined text-primary text-[18px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<span class="font-label-sm text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Giao hoả tốc</span>
+</div>
+<div class="w-px h-10 bg-outline-variant/30"></div>
+<div class="flex flex-col items-center gap-1.5 text-center flex-1">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center mb-0.5">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</div>
+<span class="font-label-sm text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Hỗ trợ 24/7</span>
+</div>
+</section>
+<!-- Category Pills (Horizontal Scroll) -->
+<section class="w-full">
+<div class="flex justify-between items-end mb-3">
+<h3 class="font-headline-md text-[18px] font-bold text-on-background tracking-tight">Danh Mục Nổi Bật</h3>
+<button class="text-primary text-sm font-semibold flex items-center gap-0.5 active:opacity-70">Xem tất cả <span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+</div>
+<div class="flex gap-2.5 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+<button class="whitespace-nowrap px-5 py-2.5 rounded-full bg-primary text-on-primary font-label-md text-sm font-semibold shadow-md shadow-primary/20 active:scale-95 transition-all border border-primary">Tất cả</button>
+<button class="whitespace-nowrap px-5 py-2.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-on-surface hover:border-outline-variant font-label-md text-sm font-medium active:scale-95 transition-all">Nhông sên dĩa</button>
+<button class="whitespace-nowrap px-5 py-2.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-on-surface hover:border-outline-variant font-label-md text-sm font-medium active:scale-95 transition-all">Dầu nhớt</button>
+<button class="whitespace-nowrap px-5 py-2.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-on-surface hover:border-outline-variant font-label-md text-sm font-medium active:scale-95 transition-all">Phụ tùng máy</button>
+<button class="whitespace-nowrap px-5 py-2.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-on-surface hover:border-outline-variant font-label-md text-sm font-medium active:scale-95 transition-all">Vỏ xe</button>
+</div>
+</section>
+<!-- Product Grid (Vertical List for Mobile) -->
+<section class="w-full flex flex-col gap-3.5">
+<h3 class="font-headline-md text-[18px] font-bold text-on-background mb-1 tracking-tight">Sản Phẩm Bán Chạy</h3>
+<!-- Product Card 1 -->
+<div class="flex bg-surface rounded-2xl p-3 shadow-sm border border-outline-variant/20 hover:border-primary/50 hover:shadow-md transition-all items-center gap-4 relative group">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-container-low border border-outline-variant/10 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean, studio-lit photograph of a high-performance motorcycle drive chain and sprocket set. The metallic surfaces gleam under bright, professional light. The background is a crisp white to emphasize the product's premium quality and precision engineering. The overall aesthetic is corporate modern, suitable for an e-commerce specialist store." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByy2HkEeo5-MOXwMX1DcrMOjyygBrPC4-KWNlDCqe7L39AJW4GjFe4utF3t1dR2fVHWuhu-vh51RT9OUDjKskSE20Dvz1sDnLqZQ3MA7iOJdgUSi9IBRt6MDU7V8c4h549SUo0Dldh97I3kcYXy8IJqWvgs2sB66iwvImlXxNaUDGFppM7LRfywkXIF4KXhqW5zTkU7bLPqyLvUe730EdsgXIGy0xguyvZ-JMvnxdXvMLaqXpYDMtt5DIMefUd7IS-VYT9a0OmmiM"/>
+</div>
+<div class="flex-grow flex flex-col justify-between py-1 pr-1">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-primary text-[12px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[11px] font-bold text-on-surface-variant">4.9</span>
+<span class="text-[11px] text-outline ml-1">Đã bán 1.2k</span>
+</div>
+<h4 class="font-label-md text-sm text-on-surface line-clamp-2 leading-snug font-semibold group-hover:text-primary transition-colors">Nhông Sên Dĩa RK Takasago 428 HSB</h4>
+<p class="font-body-md text-base text-primary font-bold mt-1.5 tracking-tight">450.000 ₫</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-secondary-container-dark font-label-sm text-[10px] font-bold uppercase tracking-wider">
+                                Có sẵn
+                            </span>
+</div>
+</div>
+<button class="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<!-- Product Card 2 -->
+<div class="flex bg-surface rounded-2xl p-3 shadow-sm border border-outline-variant/20 hover:border-primary/50 hover:shadow-md transition-all items-center gap-4 relative group">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-container-low border border-outline-variant/10 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional product shot of a premium synthetic motorcycle engine oil bottle. The bottle is sleek, with high-quality branding, placed against a pure white background. The lighting is even, highlighting the contours of the plastic container. The aesthetic is clean, trustworthy, and modern, fitting a high-end auto parts catalogue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTBY-rGChG5mHtIjgsRzFBxSe5EZbZ6j7E2KNLEKtjwmOuGzc1nNQes0wE_DUBvFZRPoH14xhg7jp0SvGjEFtcEmbWC4nWTPT_jMgfA5VgYR4jP8xLT1mZANgf-yxXp80jquDztRPg3XMbLP9AdzGEixzN_9DcgKy1Ah6AzVOVxtk5iFbn8nbEwbL_cUtqFwYEo5hg6S9MJ7VdiFJ-iBa4JmQTlPvNE3v6Ucgyt5ck6F4fRSTuoqNSoxEzc9R_zM5n1RkHuM9Dyw8"/>
+</div>
+<div class="flex-grow flex flex-col justify-between py-1 pr-1">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-primary text-[12px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[11px] font-bold text-on-surface-variant">5.0</span>
+<span class="text-[11px] text-outline ml-1">Đã bán 850</span>
+</div>
+<h4 class="font-label-md text-sm text-on-surface line-clamp-2 leading-snug font-semibold group-hover:text-primary transition-colors">Nhớt Motul 300V 10W40 Factory Line</h4>
+<p class="font-body-md text-base text-primary font-bold mt-1.5 tracking-tight">850.000 ₫</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-[10px] font-bold uppercase tracking-wider">
+                                Đặt trước
+                            </span>
+</div>
+</div>
+<button class="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<!-- Product Card 3 -->
+<div class="flex bg-surface rounded-2xl p-3 shadow-sm border border-outline-variant/20 hover:border-primary/50 hover:shadow-md transition-all items-center gap-4 relative group">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-container-low border border-outline-variant/10 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A close-up, high-resolution image of a specialized motorcycle brake pad set. The friction material texture is clearly visible, and the metal backing plate is pristine. Shot on a clean, light surface with bright, even lighting to convey durability and safety. The style is modern, minimalist, and highly professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCInZW50FfTBkj52AOnFWBva-WTcgBjRt82LqASeNGRdOKOcvldBo9Z4ERs1_YZwprIPx3eai2XxCZhXGrGUDx7OoMw9tDldmN-BtchqndbDZv_FYFH06d7oys8yeaPBh_azKbNpQ7fBae_hKu2eVES_Hu46YUzh1lj8vp67kToT6N8ugTIsHbb3tHXCe13bisQ9T3tUbzHA49clt6jNBsAMc0AM2YN52vXXUKRLI0PKUWRxPxlxZRcd50MlTdLcn362l1KYRevF40"/>
+</div>
+<div class="flex-grow flex flex-col justify-between py-1 pr-1">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-primary text-[12px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[11px] font-bold text-on-surface-variant">4.8</span>
+<span class="text-[11px] text-outline ml-1">Đã bán 5k+</span>
+</div>
+<h4 class="font-label-md text-sm text-on-surface line-clamp-2 leading-snug font-semibold group-hover:text-primary transition-colors">Bố thắng đĩa Elig Ceramic Cao Cấp</h4>
+<p class="font-body-md text-base text-primary font-bold mt-1.5 tracking-tight">120.000 ₫</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-secondary-container-dark font-label-sm text-[10px] font-bold uppercase tracking-wider">
+                                Có sẵn
+                            </span>
+</div>
+</div>
+<button class="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Sticky Bottom Navigation (Mobile Specific Action Bar) -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/95 backdrop-blur-md border-t border-outline-variant/30 shadow-[0_-8px_20px_-8px_rgba(0,0,0,0.1)] z-50 md:hidden px-4 py-3 pb-6 flex gap-3">
+<button class="flex-[0.35] bg-surface-container-lowest text-primary border border-primary/30 font-label-md py-3 rounded-2xl flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[22px]">chat</span>
+<span class="text-[11px] font-semibold">Tư vấn Zalo</span>
+</button>
+<button class="flex-[0.65] bg-primary text-on-primary font-label-md text-[15px] font-bold py-3 rounded-2xl flex items-center justify-center gap-2.5 active:scale-95 transition-all shadow-lg shadow-primary/30 relative"><span class="material-symbols-outlined text-[22px]">shopping_bag</span>Giỏ hàng (3)</button>
+</div>
+</body></html>
