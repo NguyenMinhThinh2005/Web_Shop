@@ -1,5 +1,5 @@
-const { User } = require("../models");
-const { verifyAccessToken } = require("../utils/jwt");
+const { User } = require("../models/index.js");
+const { verifyAccessToken } = require("../utils/jwt.js");
 
 async function authMiddleware(req, res, next) {
   try {
@@ -53,7 +53,18 @@ function requireAdmin(req, res, next) {
   return next();
 }
 
+function requireCustomer(req, res, next) {
+  if (!req.user || req.user.role !== "customer") {
+    const error = new Error("Customer permission required");
+    error.statusCode = 403;
+    return next(error);
+  }
+
+  return next();
+}
+
 module.exports = {
   authMiddleware,
   requireAdmin,
+  requireCustomer,
 };

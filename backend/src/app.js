@@ -18,6 +18,9 @@ const publicProductRoutes = require("./modules/products/public.product.routes.js
 const adminOrderRoutes = require("./modules/orders/admin.order.routes.js");
 const publicOrderRoutes = require("./modules/orders/public.order.routes.js");
 const adminReportRoutes = require("./modules/reports/admin.report.routes.js");
+const customerAuthRoutes = require("./modules/customer/customer.auth.routes.js");
+const customerAddressRoutes = require("./modules/customer/customer.address.routes.js");
+const customerOrderRoutes = require("./modules/customer/customer.order.routes.js");
 
 const notFoundMiddleware = require("./middlewares/notFound.middleware.js");
 const errorMiddleware = require("./middlewares/error.middleware.js");
@@ -64,6 +67,9 @@ app.use("/api/admin/reports", adminReportRoutes);
 app.use("/api/admin", adminProductRoutes);
 app.use("/api/admin", adminCategoryRoutes);
 app.use("/api/admin/shops", adminShopRoutes);
+app.use("/api/customer/auth", customerAuthRoutes);
+app.use("/api/customer/addresses", customerAddressRoutes);
+app.use("/api/customer/orders", customerOrderRoutes);
 app.use("/api/public/orders", publicOrderRoutes);
 app.use("/api/public/shops", publicProductRoutes);
 app.use("/api/public/shops", publicCategoryRoutes);

@@ -43,6 +43,7 @@ logs/
 wwwroot/uploads/
 
 # User-specific files
+.env
 *.env
 local.settings.json
 
@@ -64,7 +65,6 @@ Thumbs.db
 .cache/
 
 node_modules
-.env.example
 .env.local
 .env.test   
 dist

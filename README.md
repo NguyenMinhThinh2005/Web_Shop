@@ -79,3 +79,13 @@ npm run build
 - Shipping is manual tracking only.
 - Payment, customer login, bulk import, shipping API, and warehouse management are not included in the MVP.
 - Do not put real secrets in `.env.example` or documentation. Put local secrets only in `.env`.
+
+## Production Deployment
+
+- Backend: Render
+- Frontend: Vercel
+- Database: MongoDB Atlas
+- Deployment guide: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+- Production security checklist: [docs/PRODUCTION_SECURITY_CHECKLIST.md](docs/PRODUCTION_SECURITY_CHECKLIST.md)
+
+Do not commit real secrets, production database URLs, admin passwords, JWT secrets, or tokens. Keep production values in Render and Vercel environment variables only.

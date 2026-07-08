@@ -17,7 +17,9 @@ export const publicApi = {
     return axiosClient.get(`/public/shops/${slug}/products/${productSlug}`)
   },
 
-  createOrder(payload) {
-    return axiosClient.post('/public/orders', payload)
+  createOrder(payload, token = '') {
+    return axiosClient.post('/public/orders', payload, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
   },
 }

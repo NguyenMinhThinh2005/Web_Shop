@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const env = require("../../config/env.js");
-const { Order, Product, Shop } = require("../../models/index.js");
+const { Order, Product, Shop, User } = require("../../models/index.js");
 const {
   isValidVietnamPhone,
   normalizePhone,
   normalizeSlug,
 } = require("../../utils/validators.js");
 const generateOrderCode = require("../../utils/orderCode.js");
+const { verifyAccessToken } = require("../../utils/jwt.js");
 const sheetService = require("../sheet/sheet.service.js");
 
 function assertValidObjectId(id, message) {
@@ -173,6 +174,38 @@ function appendActivityLog(order, { type, message, actor, changes }) {
   });
 }
 
+async function getOptionalCustomerFromRequest(req) {
+  try {
+    const authHeader = req.headers.authorization || "";
+
+    if (!authHeader.startsWith("Bearer ")) {
+      return null;
+    }
+
+    const token = authHeader.replace("Bearer ", "").trim();
+
+    if (!token) {
+      return null;
+    }
+
+    const payload = verifyAccessToken(token);
+
+    if (payload.type !== "access" || payload.role !== "customer") {
+      return null;
+    }
+
+    const user = await User.findById(payload.sub);
+
+    if (!user || user.role !== "customer" || user.status !== "active") {
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    return null;
+  }
+}
+
 function toOrderObject(order) {
   if (order && typeof order.toObject === "function") {
     return order.toObject();
@@ -283,10 +316,12 @@ async function createOrder(payload, req) {
   const grandTotal = cartSubtotal + shippingFee - discountAmount;
   const source = payload.source || {};
   const sheetConfig = shop.sheetConfig || {};
+  const customerUser = await getOptionalCustomerFromRequest(req);
 
   const orderPayload = {
     orderCode: generateOrderCode(),
     shopId: shop._id,
+    customerId: customerUser ? customerUser._id : null,
     pageUrl: payload.pageUrl || "",
     campaign: {
       campaignId: shop.campaignId || "",

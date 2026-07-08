@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ShoppingCart } from 'lucide-react'
 import { getApiErrorMessage } from '../../api/apiError'
+import { customerApi } from '../../api/customerApi'
 import { publicApi } from '../../api/publicApi'
 import CheckoutForm from '../../components/checkout/CheckoutForm'
 import OrderSummary from '../../components/checkout/OrderSummary'
+import { useCustomerAuth } from '../../context/customerAuth'
 import { CartProvider, useCart } from '../../store/cartStore'
-
-const invalidPhoneMessage =
-  'Số điện thoại chưa hợp lệ. Vui lòng nhập số Việt Nam, ví dụ 0912345678.'
+import { saveLastGuestOrder, saveLastShopSlug } from '../../utils/lastGuestOrder'
+import { invalidPhoneMessage, isValidVietnamPhone } from '../../utils/phone'
 
 const initialForm = {
   name: '',
@@ -19,33 +20,11 @@ const initialForm = {
   note: '',
 }
 
-function isValidVietnamPhone(value) {
-  const trimmed = String(value || '').trim()
-  const digits = trimmed.replace(/\D/g, '')
-
-  if (!trimmed || digits.length < 10 || digits.length > 11) {
-    return false
-  }
-
-  if (/^(\d)\1+$/.test(digits)) {
-    return false
-  }
-
-  if (digits.startsWith('0')) {
-    return digits.length === 10
-  }
-
-  if (digits.startsWith('84')) {
-    return digits.length === 11
-  }
-
-  return false
-}
-
 function CheckoutContent() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const { items, subtotal, clearCart } = useCart()
+  const { customer, token, isAuthenticated } = useCustomerAuth()
   const [shop, setShop] = useState(null)
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({})
@@ -53,6 +32,7 @@ function CheckoutContent() {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
+    saveLastShopSlug(slug)
     let mounted = true
 
     async function loadShop() {
@@ -70,6 +50,52 @@ function CheckoutContent() {
       mounted = false
     }
   }, [slug])
+
+  useEffect(() => {
+    let mounted = true
+
+    async function prefillCustomer() {
+      if (!isAuthenticated || !customer) return
+
+      setForm((current) => ({
+        ...current,
+        name: current.name || customer.fullName || '',
+        phone: current.phone || customer.phone || '',
+      }))
+
+      try {
+        const response = await customerApi.getCustomerAddresses()
+        if (!mounted) return
+
+        const addresses = response.data.addresses || []
+        const defaultAddress =
+          addresses.find((address) => address.isDefault) || addresses[0]
+
+        if (defaultAddress) {
+          setForm((current) => ({
+            ...current,
+            name:
+              current.name ||
+              defaultAddress.receiverName ||
+              customer.fullName ||
+              '',
+            phone: current.phone || defaultAddress.phone || customer.phone || '',
+            province: current.province || defaultAddress.province || '',
+            address: current.address || defaultAddress.addressLine || '',
+            note: current.note || defaultAddress.note || '',
+          }))
+        }
+      } catch {
+        // Keep checkout usable even if address preload fails.
+      }
+    }
+
+    prefillCustomer()
+
+    return () => {
+      mounted = false
+    }
+  }, [customer, isAuthenticated])
 
   function updateField(field, value) {
     setForm((current) => ({ ...current, [field]: value }))
@@ -122,10 +148,18 @@ function CheckoutContent() {
         },
       }
 
-      const response = await publicApi.createOrder(payload)
+      const response = await publicApi.createOrder(payload, token)
       const order = response.data.order
 
       localStorage.setItem(`lastOrder:${slug}`, JSON.stringify(order))
+      if (!isAuthenticated) {
+        saveLastGuestOrder({
+          orderCode: order.orderCode,
+          phone: form.phone.trim(),
+          shopSlug: slug,
+          createdAt: order.createdAt,
+        })
+      }
       clearCart()
       navigate(`/shop/${slug}/success`, { state: { order } })
     } catch (error) {

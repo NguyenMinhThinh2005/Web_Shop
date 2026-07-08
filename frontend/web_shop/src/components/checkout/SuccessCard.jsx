@@ -1,7 +1,42 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, UserRound } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, PackageCheck, UserRound } from 'lucide-react'
+import { useCustomerAuth } from '../../context/customerAuth'
+
+function buildClaimUrl(path, order) {
+  const params = new URLSearchParams({
+    redirect: '/customer/orders',
+  })
+
+  if (order?.orderCode) {
+    params.set('claimOrderCode', order.orderCode)
+  }
+
+  return `${path}?${params.toString()}`
+}
+
+function SuccessAccountCard({
+  icon,
+  title,
+  subtitle,
+  actions,
+}) {
+  return (
+    <div className="success-account-card">
+      <div className="success-account-icon">{icon}</div>
+      <div className="success-account-content">
+        <h2 className="success-account-title">{title}</h2>
+        {subtitle ? <p>{subtitle}</p> : null}
+      </div>
+      <div className="success-account-actions">{actions}</div>
+    </div>
+  )
+}
 
 function SuccessCard({ shop, order, shopSlug }) {
+  const { isAuthenticated } = useCustomerAuth()
+  const [hideAccountCard, setHideAccountCard] = useState(false)
+
   if (!order) {
     return (
       <section className="success-card">
@@ -16,7 +51,7 @@ function SuccessCard({ shop, order, shopSlug }) {
 
   return (
     <section className="success-card">
-      <p className="eyebrow">{shop?.name || 'Chú Tám Tân Xe'}</p>
+      <p className="eyebrow">{shop?.name || 'Cửa hàng'}</p>
       <div className="success-icon">
         <CheckCircle2 size={46} />
       </div>
@@ -29,30 +64,56 @@ function SuccessCard({ shop, order, shopSlug }) {
         <span>Mã đơn hàng</span>
         <strong>{order.orderCode}</strong>
       </div>
-      <div className="login-suggestion">
-        <UserRound size={26} />
-        <div>
-          <h2>Tạo tài khoản nhanh?</h2>
-          <p>
-            Đăng nhập để lần sau đặt nhanh hơn, không cần nhập lại địa chỉ.
-            Theo dõi đơn hàng dễ dàng.
-          </p>
-        </div>
-        <div className="success-actions">
-          <button
-            type="button"
-            className="button button--ghost"
-            onClick={() =>
-              alert('Tính năng đăng nhập khách hàng sẽ làm sau')
-            }
-          >
-            Đăng nhập
-          </button>
-          <Link className="button button--primary" to={`/shop/${shopSlug}`}>
-            Để sau
-          </Link>
-        </div>
-      </div>
+
+      {isAuthenticated ? (
+        <SuccessAccountCard
+          icon={<PackageCheck size={24} />}
+          title="Đơn đã được lưu vào tài khoản của bạn."
+          subtitle=""
+          actions={
+            <>
+              <Link className="button button--primary" to="/customer/orders">
+                Xem đơn của tôi
+              </Link>
+              <Link className="button button--ghost" to={`/shop/${shopSlug}`}>
+                Tiếp tục mua hàng
+              </Link>
+            </>
+          }
+        />
+      ) : null}
+
+      {!isAuthenticated && !hideAccountCard ? (
+        <SuccessAccountCard
+          icon={<UserRound size={24} />}
+          title="Lần sau đặt nhanh hơn"
+          subtitle="Lưu thông tin và xem lại đơn."
+          actions={
+            <>
+              <Link
+                className="button button--primary"
+                to={buildClaimUrl('/customer/register', order)}
+              >
+                Đăng ký
+              </Link>
+              <Link
+                className="button button--ghost"
+                to={buildClaimUrl('/customer/login', order)}
+              >
+                Đăng nhập
+              </Link>
+              <button
+                type="button"
+                className="button button--ghost"
+                onClick={() => setHideAccountCard(true)}
+              >
+                Để sau
+              </button>
+            </>
+          }
+        />
+      ) : null}
+
       <Link className="button button--secondary" to={`/shop/${shopSlug}`}>
         <ArrowLeft size={18} />
         Quay lại cửa hàng
