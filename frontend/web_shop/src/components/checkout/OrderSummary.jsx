@@ -1,5 +1,5 @@
-import { Send } from 'lucide-react'
-import { formatMoney } from '../../utils/formatMoney'
+import { Send } from "lucide-react";
+import { formatMoney } from "../../utils/formatMoney";
 
 function OrderSummary({ items, subtotal, submitLabel, submitting, onSubmit }) {
   return (
@@ -12,7 +12,11 @@ function OrderSummary({ items, subtotal, submitLabel, submitting, onSubmit }) {
         {items.map((item) => (
           <div className="summary-item" key={item.productId}>
             <div className="summary-item__image">
-              {item.image ? <img src={item.image} alt={item.name} /> : <span>Ảnh</span>}
+              {item.image ? (
+                <img src={item.image} alt={item.name} />
+              ) : (
+                <span>Ảnh</span>
+              )}
             </div>
             <div>
               <strong>{item.name}</strong>
@@ -29,7 +33,7 @@ function OrderSummary({ items, subtotal, submitLabel, submitting, onSubmit }) {
         </div>
         <div>
           <span>Phí giao hàng</span>
-          <strong>Chưa tính</strong>
+          <strong style={{ color: "green" }}>Free Ship</strong>
         </div>
         <div className="summary-total">
           <span>Tổng dự kiến</span>
@@ -43,10 +47,10 @@ function OrderSummary({ items, subtotal, submitLabel, submitting, onSubmit }) {
         onClick={onSubmit}
       >
         <Send size={18} />
-        {submitting ? 'Đang gửi đơn...' : submitLabel}
+        {submitting ? "Đang gửi đơn..." : submitLabel}
       </button>
     </aside>
-  )
+  );
 }
 
-export default OrderSummary
+export default OrderSummary;
