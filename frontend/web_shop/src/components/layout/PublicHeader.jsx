@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Bike,
@@ -22,6 +23,10 @@ function getCustomerLabel(customer) {
   return customer?.fullName?.split(' ')?.at(-1) || 'Tài khoản'
 }
 
+function getShopLogoUrl(shop) {
+  return shop?.avatarUrl || shop?.logoUrl || ''
+}
+
 function PublicHeader({
   shop,
   search,
@@ -31,13 +36,24 @@ function PublicHeader({
   onContactOpen,
 }) {
   const { customer, isAuthenticated, logout } = useCustomerAuth()
+  const [failedLogoUrl, setFailedLogoUrl] = useState('')
+  const logoUrl = getShopLogoUrl(shop)
+  const shouldShowLogo = Boolean(logoUrl && failedLogoUrl !== logoUrl)
 
   return (
     <header className="public-header">
       <div className="public-header__inner">
         <Link className="brand-mark" to={`/shop/${shop?.slug || ''}`}>
           <span className="brand-mark__icon">
-            <Wrench size={22} />
+            {shouldShowLogo ? (
+              <img
+                src={logoUrl}
+                alt={shop?.name || 'Shop'}
+                onError={() => setFailedLogoUrl(logoUrl)}
+              />
+            ) : (
+              <Wrench size={22} />
+            )}
           </span>
           <span>
             <strong>{shop?.name || 'Chú Tám Tân Xe'}</strong>

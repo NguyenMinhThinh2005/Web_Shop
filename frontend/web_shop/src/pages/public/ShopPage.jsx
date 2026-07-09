@@ -30,6 +30,10 @@ function useDebouncedValue(value, delay = 300) {
   return debounced
 }
 
+function getShopHeroImageUrl(shop) {
+  return shop?.thumbnailUrl || shop?.coverImageUrl || shop?.bannerUrl || ''
+}
+
 function ShopContent() {
   const { slug, productSlug } = useParams()
   const navigate = useNavigate()
@@ -46,7 +50,12 @@ function ShopContent() {
   const [cartOpen, setCartOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [failedHeroImageUrl, setFailedHeroImageUrl] = useState('')
   const debouncedSearch = useDebouncedValue(search)
+  const heroImageUrl = getShopHeroImageUrl(shop)
+  const shouldShowHeroImage = Boolean(
+    heroImageUrl && failedHeroImageUrl !== heroImageUrl,
+  )
 
   useEffect(() => {
     let mounted = true
@@ -187,7 +196,21 @@ function ShopContent() {
         />
 
         <div className="shop-main">
-          <section className="shop-hero">
+          <section
+            className={
+              shouldShowHeroImage
+                ? 'shop-hero shop-hero--with-image'
+                : 'shop-hero'
+            }
+          >
+            {shouldShowHeroImage ? (
+              <img
+                className="shop-hero__image"
+                src={heroImageUrl}
+                alt={shop?.name || 'Shop'}
+                onError={() => setFailedHeroImageUrl(heroImageUrl)}
+              />
+            ) : null}
             <div className="shop-hero__content">
               <p className="eyebrow">Chuyên phụ tùng xe máy</p>
               <h1>{shop?.name || 'Cửa hàng'}</h1>
