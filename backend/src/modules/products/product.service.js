@@ -53,6 +53,12 @@ function applyDuplicateKeyError(error) {
     return;
   }
 
+  if (error.keyPattern && error.keyPattern.importKey) {
+    error.message = "Import key already exists in this shop.";
+    error.statusCode = 409;
+    return;
+  }
+
   error.message = "Product already exists";
   error.statusCode = 409;
 }
@@ -480,6 +486,30 @@ async function softDeleteProduct(productId) {
   );
 }
 
+async function updateProductPin(productId, payload) {
+  const product = await getProductById(productId);
+  const isPinned = Boolean(payload.isPinned);
+
+  const updateData = isPinned
+    ? {
+        isPinned: true,
+        pinnedOrder: Number.isFinite(Number(payload.pinnedOrder))
+          ? Number(payload.pinnedOrder)
+          : 0,
+        pinnedAt: product.pinnedAt || new Date(),
+      }
+    : {
+        isPinned: false,
+        pinnedOrder: 0,
+        pinnedAt: null,
+      };
+
+  return Product.findByIdAndUpdate(productId, updateData, {
+    new: true,
+    runValidators: true,
+  });
+}
+
 async function listPublicProducts(shopSlug, filters = {}) {
   const shop = await getActiveShopBySlug(shopSlug);
   const filter = buildProductFilter(shop._id, {
@@ -487,7 +517,11 @@ async function listPublicProducts(shopSlug, filters = {}) {
     status: "active",
   });
 
-  return Product.find(filter).sort({ sortOrder: 1, createdAt: -1 });
+  return Product.find(filter).sort({
+    isPinned: -1,
+    pinnedOrder: 1,
+    createdAt: -1,
+  });
 }
 
 async function getPublicProductBySlug(shopSlug, productSlug) {
@@ -521,6 +555,7 @@ module.exports = {
   getProductById,
   updateProduct,
   softDeleteProduct,
+  updateProductPin,
   listPublicProducts,
   getPublicProductBySlug,
 };

@@ -15,6 +15,24 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
 
+    importKey: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    sourceProductId: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    sourceSystem: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     name: {
       type: String,
       trim: true,
@@ -102,6 +120,22 @@ const productSchema = new mongoose.Schema(
       index: true,
     },
 
+    isPinned: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+
+    pinnedOrder: {
+      type: Number,
+      default: 0,
+    },
+
+    pinnedAt: {
+      type: Date,
+      default: null,
+    },
+
     sortOrder: {
       type: Number,
       default: 0,
@@ -121,7 +155,15 @@ const productSchema = new mongoose.Schema(
 
 productSchema.index({ shopId: 1, sku: 1 }, { unique: true });
 productSchema.index({ shopId: 1, slug: 1 }, { unique: true });
+productSchema.index(
+  { shopId: 1, importKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { importKey: { $type: "string", $gt: "" } },
+  },
+);
 productSchema.index({ shopId: 1, status: 1, sortOrder: 1 });
+productSchema.index({ shopId: 1, status: 1, isPinned: -1, pinnedOrder: 1 });
 productSchema.index({ name: "text", sku: "text", shortDescription: "text" });
 
 module.exports = mongoose.model("Product", productSchema);

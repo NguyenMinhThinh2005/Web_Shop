@@ -2,6 +2,7 @@ const { z } = require("zod");
 const asyncHandler = require("../../utils/asyncHandler.js");
 const { successResponse } = require("../../utils/apiResponse.js");
 const productService = require("./product.service.js");
+const productImportService = require("./productImport.service.js");
 
 const statusSchema = z.enum(["active", "inactive", "draft"]);
 const priceModeSchema = z.enum(["fixed", "contact", "hidden"]);
@@ -37,6 +38,18 @@ const productBodySchema = z.object({
 });
 
 const updateProductSchema = productBodySchema.partial();
+
+const importProductsSchema = z.object({
+  schemaVersion: z.string().optional(),
+  source: z.string().trim().optional(),
+  shopSlug: z.string().trim().optional(),
+  products: z.array(z.unknown()),
+});
+
+const pinProductSchema = z.object({
+  isPinned: z.boolean(),
+  pinnedOrder: z.number().optional(),
+});
 
 function validate(schema, data, message) {
   const parsed = schema.safeParse(data);
@@ -126,6 +139,61 @@ const deleteProduct = asyncHandler(async (req, res) => {
   });
 });
 
+function parseImportBody(body) {
+  const parsed = validate(importProductsSchema, body, "Invalid import data");
+
+  return {
+    products: parsed.products,
+    source: parsed.source || "",
+    shopSlug: parsed.shopSlug || "",
+  };
+}
+
+const validateProductImport = asyncHandler(async (req, res) => {
+  const payload = parseImportBody(req.body);
+  const summary = await productImportService.importProducts({
+    shopId: req.params.shopId,
+    products: payload.products,
+    dryRun: true,
+    source: payload.source,
+    shopSlug: payload.shopSlug,
+  });
+
+  return successResponse(res, {
+    message: "Product import validated",
+    data: { summary },
+  });
+});
+
+const importProducts = asyncHandler(async (req, res) => {
+  const payload = parseImportBody(req.body);
+  const summary = await productImportService.importProducts({
+    shopId: req.params.shopId,
+    products: payload.products,
+    dryRun: false,
+    source: payload.source,
+    shopSlug: payload.shopSlug,
+  });
+
+  return successResponse(res, {
+    message: "Product import completed",
+    data: { summary },
+  });
+});
+
+const updateProductPin = asyncHandler(async (req, res) => {
+  const payload = validate(pinProductSchema, req.body, "Invalid pin data");
+  const product = await productService.updateProductPin(
+    req.params.productId,
+    payload,
+  );
+
+  return successResponse(res, {
+    message: "Product pin updated",
+    data: { product },
+  });
+});
+
 const listPublicProducts = asyncHandler(async (req, res) => {
   const querySchema = z.object({
     categoryId: z.string().trim().optional(),
@@ -163,6 +231,9 @@ module.exports = {
   getProductById,
   updateProduct,
   deleteProduct,
+  validateProductImport,
+  importProducts,
+  updateProductPin,
   listPublicProducts,
   getPublicProductBySlug,
 };

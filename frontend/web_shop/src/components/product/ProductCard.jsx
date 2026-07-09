@@ -44,6 +44,9 @@ function ProductCard({ product, onAdd, onDetail }) {
         className="product-card__image"
         onClick={() => onDetail(product)}
       >
+        {product.isPinned ? (
+          <span className="product-card__badge">Nổi bật</span>
+        ) : null}
         <ProductImage product={product} />
       </button>
       <div className="product-card__body">

@@ -11,12 +11,13 @@ function successResponse(
 
 function errorResponse(
   res,
-  { message = "Error", errors = null, statusCode = 500 },
+  { message = "Error", errors = null, statusCode = 500, extra = null },
 ) {
   return res.status(statusCode).json({
     success: false,
     message,
     errors,
+    ...(extra || {}),
   });
 }
 

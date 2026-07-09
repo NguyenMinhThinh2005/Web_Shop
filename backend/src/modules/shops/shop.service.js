@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Shop } = require("../../models/index.js");
 const {
   isHttpUrl,
+  isValidSlug,
   isValidVietnamPhone,
   normalizePhone,
   normalizeSlug,
@@ -18,11 +19,32 @@ function assertValidObjectId(shopId) {
   }
 }
 
+function normalizeShopSlug(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "d")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s_-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
 function buildSlug({ slug, name }) {
-  const normalizedSlug = normalizeSlug(slug || name);
+  const normalizedSlug = normalizeShopSlug(slug || name);
 
   if (!normalizedSlug) {
     const error = new Error("Shop slug is required");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (!isValidSlug(normalizedSlug)) {
+    const error = new Error(
+      "Slug chỉ gồm chữ thường, số, dấu gạch ngang (-) hoặc gạch dưới (_), không bắt đầu/kết thúc bằng dấu.",
+    );
     error.statusCode = 400;
     throw error;
   }

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { ADMIN_TOKEN_KEY } from '../api/adminApi'
 import AdminLoginPage from '../pages/admin/AdminLoginPage'
 import AdminOrdersPage from '../pages/admin/AdminOrdersPage'
+import AdminProductImportPage from '../pages/admin/AdminProductImportPage'
 import AdminReportsPage from '../pages/admin/AdminReportsPage'
 import AdminShopCatalogPage from '../pages/admin/AdminShopCatalogPage'
 import AdminShopsPage from '../pages/admin/AdminShopsPage'
@@ -80,6 +81,14 @@ function AppRouter() {
         element={
           <RequireAdmin>
             <AdminShopCatalogPage />
+          </RequireAdmin>
+        }
+      />
+      <Route
+        path="/admin/shops/:shopId/import-products"
+        element={
+          <RequireAdmin>
+            <AdminProductImportPage />
           </RequireAdmin>
         }
       />

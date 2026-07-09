@@ -345,6 +345,24 @@
   color: #607089;
 }
 
+.admin-warning {
+  display: grid;
+  max-width: 1440px;
+  margin: 0 auto 14px;
+  gap: 10px;
+  border: 1px solid #fedf89;
+  border-radius: 12px;
+  background: #fffbeb;
+  color: #93370d;
+  padding: 14px;
+}
+
+.admin-warning p {
+  margin: 0;
+  color: #9a6700;
+  font-weight: 800;
+}
+
 .admin-error {
   border: 1px solid #ffc9c9;
   background: #fff1f1;
@@ -674,6 +692,100 @@
 .admin-badge--returned {
   background: #fff1f1;
   color: #b42318;
+}
+
+.admin-badge--pinned,
+.admin-badge--create {
+  background: #e7f8ee;
+  color: #067647;
+}
+
+.admin-badge--update {
+  background: #fff4d6;
+  color: #9a6700;
+}
+
+.admin-badge--error,
+.admin-badge--skip {
+  background: #fff1f1;
+  color: #b42318;
+}
+
+.admin-import-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-import-editor {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-import-textarea {
+  min-height: 360px;
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.admin-file-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #eef3fb;
+  color: #233045;
+  cursor: pointer;
+  font-weight: 900;
+  padding: 0 14px;
+}
+
+.admin-file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.admin-import-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.admin-import-summary div {
+  display: grid;
+  gap: 4px;
+  border: 1px solid #dfe7f3;
+  border-radius: 14px;
+  background: #f8f9ff;
+  padding: 14px;
+}
+
+.admin-import-summary span {
+  color: #607089;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.admin-import-summary strong {
+  font-size: 22px;
+}
+
+.admin-confirm-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-confirm-copy p {
+  margin: 0;
+  color: #53627a;
+  font-weight: 800;
+  line-height: 1.6;
 }
 
 .admin-toast {

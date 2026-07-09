@@ -6,9 +6,12 @@ import {
   ExternalLink,
   PackageCheck,
   Pencil,
+  Pin,
+  PinOff,
   Plus,
   Tags,
   Trash2,
+  Upload,
 } from 'lucide-react'
 import { ADMIN_TOKEN_KEY, adminApi } from '../../api/adminApi'
 import { getApiErrorMessage } from '../../api/apiError'
@@ -170,6 +173,8 @@ function AdminShopCatalogPage() {
   const [categoryForm, setCategoryForm] = useState(EMPTY_CATEGORY)
   const [productModal, setProductModal] = useState(null)
   const [productForm, setProductForm] = useState(EMPTY_PRODUCT)
+  const [pinModal, setPinModal] = useState(null)
+  const [pinOrder, setPinOrder] = useState(1)
   const [modalError, setModalError] = useState('')
   const [saving, setSaving] = useState(false)
   const [categoryPagination, setCategoryPagination] = useState({
@@ -559,6 +564,32 @@ function AdminShopCatalogPage() {
     }
   }
 
+  async function updateProductPin(product, isPinned, pinnedOrderValue = 0) {
+    const pinnedOrder = isPinned ? Number(pinnedOrderValue || 0) : 0
+
+    if (isPinned && Number.isNaN(pinnedOrder)) {
+      setError('Thứ tự pin phải là số')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+    try {
+      await adminApi.updateProductPin(product._id, {
+        isPinned,
+        pinnedOrder,
+      })
+      setToast(isPinned ? 'Đã pin sản phẩm' : 'Đã bỏ pin sản phẩm')
+      setPinModal(null)
+      await loadCatalog()
+    } catch (apiError) {
+      if (handleAuthError(apiError)) return
+      setError(getApiErrorMessage(apiError))
+    } finally {
+      setLoading(false)
+    }
+  }
+
   function openCategoryCreate() {
     setCategoryForm(EMPTY_CATEGORY)
     setModalError('')
@@ -714,6 +745,14 @@ function AdminShopCatalogPage() {
               <h3>Sản phẩm</h3>
               <button
                 type="button"
+                className="admin-button admin-button--ghost"
+                onClick={() => navigate(`/admin/shops/${shopId}/import-products`)}
+              >
+                <Upload size={16} />
+                Import JSON
+              </button>
+              <button
+                type="button"
                 className="admin-button admin-button--primary"
                 onClick={openProductCreate}
               >
@@ -777,6 +816,7 @@ function AdminShopCatalogPage() {
                     <th>Danh mục</th>
                     <th>Trạng thái</th>
                     <th>Featured</th>
+                    <th>Pin</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -813,6 +853,15 @@ function AdminShopCatalogPage() {
                       </td>
                       <td>{product.isFeatured ? 'Có' : '-'}</td>
                       <td>
+                        {product.isPinned ? (
+                          <span className="admin-badge admin-badge--pinned">
+                            Đang pin #{product.pinnedOrder || 0}
+                          </span>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+                      <td>
                         <div className="admin-action-row">
                           <button
                             type="button"
@@ -837,6 +886,28 @@ function AdminShopCatalogPage() {
                               <ExternalLink size={16} />
                             </button>
                           ) : null}
+                          {product.isPinned ? (
+                            <button
+                              type="button"
+                              className="admin-icon-button"
+                              onClick={() => setPinModal({ mode: 'unpin', product })}
+                              aria-label="Bỏ pin sản phẩm"
+                            >
+                              <PinOff size={16} />
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="admin-icon-button"
+                              onClick={() => {
+                                setPinOrder(product.pinnedOrder || 1)
+                                setPinModal({ mode: 'pin', product })
+                              }}
+                              aria-label="Pin lên đầu"
+                            >
+                              <Pin size={16} />
+                            </button>
+                          )}
                           <button
                             type="button"
                             className="admin-icon-button admin-icon-button--danger"
@@ -1185,6 +1256,70 @@ function AdminShopCatalogPage() {
             </fieldset>
             {modalError ? <div className="admin-error">{modalError}</div> : null}
           </form>
+        </AdminModal>
+      ) : null}
+
+      {pinModal ? (
+        <AdminModal
+          title={
+            pinModal.mode === 'pin'
+              ? 'Pin sản phẩm'
+              : 'Bỏ pin sản phẩm?'
+          }
+          onClose={() => setPinModal(null)}
+          footer={
+            <>
+              <button
+                type="button"
+                className="admin-button admin-button--ghost"
+                onClick={() => setPinModal(null)}
+              >
+                Hủy
+              </button>
+              {pinModal.mode === 'pin' ? (
+                <button
+                  type="button"
+                  className="admin-button admin-button--primary"
+                  onClick={() =>
+                    updateProductPin(pinModal.product, true, pinOrder)
+                  }
+                  disabled={saving || loading}
+                >
+                  Lưu pin
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="admin-button admin-button--primary"
+                  onClick={() => updateProductPin(pinModal.product, false)}
+                  disabled={saving || loading}
+                >
+                  Bỏ pin
+                </button>
+              )}
+            </>
+          }
+        >
+          {pinModal.mode === 'pin' ? (
+            <div className="admin-form-grid">
+              <p className="admin-help">
+                Sản phẩm: <strong>{pinModal.product.name}</strong>
+              </p>
+              <label>
+                Thứ tự pin
+                <input
+                  type="number"
+                  min="0"
+                  value={pinOrder}
+                  onChange={(event) => setPinOrder(event.target.value)}
+                />
+              </label>
+            </div>
+          ) : (
+            <p className="admin-help">
+              Bỏ pin sản phẩm <strong>{pinModal.product.name}</strong>?
+            </p>
+          )}
         </AdminModal>
       ) : null}
 

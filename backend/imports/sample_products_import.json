@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "source": "manual_agent_normalized",
+  "products": [
+    {
+      "importKey": "NSD-007",
+      "sku": "NSD-007",
+      "sourceProductId": "1784174405",
+      "name": "Dia sen den 428 9 ly",
+      "slug": "dia-sen-den-428-9-ly",
+      "categoryName": "Nhong sen dia",
+      "price": 480000,
+      "salePrice": null,
+      "priceMode": "fixed",
+      "thumbnailUrl": "https://example.com/products/nsd-007-main.jpg",
+      "images": [
+        {
+          "url": "https://example.com/products/nsd-007-main.jpg",
+          "role": "thumbnail",
+          "alt": "Dia sen den 428 9 ly",
+          "sortOrder": 0
+        },
+        {
+          "url": "https://example.com/products/nsd-007-gallery.jpg",
+          "role": "gallery",
+          "alt": "Dia sen den 428 9 ly",
+          "sortOrder": 1
+        }
+      ],
+      "shortDescription": "Dia sen den dung cho xe pho thong.",
+      "description": "San pham da duoc chuan hoa tu file nguon ben ngoai.",
+      "status": "draft",
+      "attributes": {
+        "vehicleLine": "Wave, Dream",
+        "sourceCategory": "Phu tung xe may"
+      }
+    },
+    {
+      "importKey": "CONTACT-001",
+      "name": "San pham can tu van gia",
+      "categoryName": "",
+      "price": 0,
+      "images": [],
+      "status": "draft"
+    }
+  ]
+}

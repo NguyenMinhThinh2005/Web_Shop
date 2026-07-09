@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+﻿import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Copy, ExternalLink, Pencil, Plus, Store, Trash2 } from 'lucide-react'
 import { ADMIN_TOKEN_KEY, adminApi } from '../../api/adminApi'
@@ -71,8 +71,14 @@ function normalizeSlug(value) {
     .replace(/Đ/g, 'd')
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .replace(/[^a-z0-9\s_-]+/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+function isValidShopSlug(value) {
+  const slug = String(value || '').trim()
+  return /^(?:[a-z0-9]|[a-z0-9][a-z0-9_-]*[a-z0-9])$/.test(slug)
 }
 
 function isValidUrl(value) {
@@ -271,8 +277,10 @@ function AdminShopsPage() {
       throw new Error('Vui lòng chọn trạng thái')
     }
 
-    if (form.slug.trim() && !slug) {
-      throw new Error('Slug chỉ dùng chữ thường, số và dấu gạch ngang')
+    if (form.slug.trim() && (!slug || !isValidShopSlug(slug))) {
+      throw new Error(
+        'Slug chỉ gồm chữ thường, số, dấu gạch ngang (-) hoặc gạch dưới (_), không bắt đầu/kết thúc bằng dấu.',
+      )
     }
 
     if (!isValidUrl(form.logoUrl)) {
@@ -512,7 +520,8 @@ function AdminShopsPage() {
                   Slug
                   <input
                     value={form.slug}
-                    onChange={(event) =>
+                    onChange={(event) => updateField('slug', event.target.value)}
+                    onBlur={(event) =>
                       updateField('slug', normalizeSlug(event.target.value))
                     }
                     placeholder="Tự tạo từ tên nếu để trống"
@@ -636,3 +645,4 @@ function AdminShopsPage() {
 }
 
 export default AdminShopsPage
+

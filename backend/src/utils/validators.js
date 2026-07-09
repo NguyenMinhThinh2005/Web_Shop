@@ -49,15 +49,15 @@ function normalizeSlug(value) {
     .replace(/Đ/g, "d")
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/[^a-z0-9\s_-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/^[-_]+|[-_]+$/g, "");
 }
 
 function isValidSlug(value) {
   const slug = String(value || "").trim();
-  return Boolean(slug) && /^[a-z0-9-]+$/.test(slug);
+  return Boolean(slug) && /^(?:[a-z0-9]|[a-z0-9][a-z0-9_-]*[a-z0-9])$/.test(slug);
 }
 
 module.exports = {

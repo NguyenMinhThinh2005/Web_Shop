@@ -21,8 +21,14 @@ adminClient.interceptors.request.use((config) => {
 adminClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const normalizedError = new Error(getApiErrorMessage(error))
+    const isTimeout = error.code === 'ECONNABORTED' || /timeout/i.test(error.message || '')
+    const normalizedError = new Error(
+      isTimeout
+        ? 'Kiểm tra dữ liệu quá lâu. Hãy thử lại với ít sản phẩm hơn hoặc kiểm tra kết nối.'
+        : getApiErrorMessage(error),
+    )
     normalizedError.statusCode = error.response?.status
+    normalizedError.response = error.response
 
     return Promise.reject(normalizedError)
   },
@@ -91,6 +97,26 @@ export const adminApi = {
 
   deleteAdminProduct(productId) {
     return adminClient.delete(`/admin/products/${productId}`)
+  },
+
+  validateProductImport(shopId, payload) {
+    return adminClient.post(
+      `/admin/shops/${shopId}/products/import-json/validate`,
+      payload,
+      { timeout: 60000 },
+    )
+  },
+
+  importProductsJson(shopId, payload) {
+    return adminClient.post(
+      `/admin/shops/${shopId}/products/import-json`,
+      payload,
+      { timeout: 60000 },
+    )
+  },
+
+  updateProductPin(productId, payload) {
+    return adminClient.patch(`/admin/products/${productId}/pin`, payload)
   },
 
   getOrders(params = {}) {

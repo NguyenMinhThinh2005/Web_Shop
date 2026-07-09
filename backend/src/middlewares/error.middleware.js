@@ -34,6 +34,18 @@ function errorMiddleware(error, req, res, next) {
   const message = isDuplicateKey
     ? getDuplicateKeyMessage(error)
     : error.message || "Internal server error";
+  const extra = {};
+
+  [
+    "code",
+    "currentShopSlug",
+    "jsonShopSlug",
+    "hint",
+  ].forEach((key) => {
+    if (error[key] !== undefined) {
+      extra[key] = error[key];
+    }
+  });
 
   console.error("API Error:", {
     message: error.message,
@@ -47,9 +59,9 @@ function errorMiddleware(error, req, res, next) {
   return errorResponse(res, {
     statusCode,
     message,
+    extra,
     errors: {
       validation: error.errors || null,
-      stack: env.nodeEnv === "production" ? undefined : error.stack,
     },
   });
 }
