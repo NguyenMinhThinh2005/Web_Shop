@@ -1,86 +1,86 @@
-import { Copy, MessageCircle, Phone, Send, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { Copy, MessageCircle, Phone, Send, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 function isMobileDevice() {
-  if (typeof window === 'undefined') return false
+  if (typeof window === "undefined") return false;
 
-  return window.matchMedia('(max-width: 720px), (pointer: coarse)').matches
+  return window.matchMedia("(max-width: 720px), (pointer: coarse)").matches;
 }
 
 function maskPhone(phone) {
-  const digits = String(phone || '').replace(/\D/g, '')
+  const digits = String(phone || "").replace(/\D/g, "");
 
-  if (!digits) return ''
-  if (digits.length <= 4) return '••••'
+  if (!digits) return "";
+  if (digits.length <= 4) return "••••";
 
-  return `${digits.slice(0, 2)}•• ••• •${digits.slice(-2)}`
+  return `${digits.slice(0, 2)}•• ••• •${digits.slice(-2)}`;
 }
 
 function ContactModal({ open, onClose, shop }) {
-  const [message, setMessage] = useState('')
-  const contact = shop?.contact || {}
-  const isMobile = isMobileDevice()
+  const [message, setMessage] = useState("");
+  const contact = shop?.contact || {};
+  const isMobile = isMobileDevice();
   const maskedHotline = useMemo(
     () => maskPhone(contact.hotline),
     [contact.hotline],
-  )
+  );
 
   useEffect(() => {
-    if (!open) return undefined
+    if (!open) return undefined;
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') onClose()
-    }
+      if (event.key === "Escape") onClose();
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose, open])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, open]);
 
-  if (!open) return null
+  if (!open) return null;
 
   const hasAnyContact =
-    contact.messengerUrl || contact.zaloUrl || contact.hotline
+    contact.messengerUrl || contact.zaloUrl || contact.hotline;
 
   function showMessage(nextMessage) {
-    setMessage(nextMessage)
-    window.setTimeout(() => setMessage(''), 2200)
+    setMessage(nextMessage);
+    window.setTimeout(() => setMessage(""), 2200);
   }
 
   function openExternal(url, fallbackMessage) {
     if (!url) {
-      showMessage(fallbackMessage)
-      return
+      showMessage(fallbackMessage);
+      return;
     }
 
-    window.open(url, '_blank', 'noopener,noreferrer')
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   async function copyHotline() {
     if (!contact.hotline) {
-      showMessage('Shop chưa cấu hình số tư vấn')
-      return
+      showMessage("Shop chưa cấu hình số tư vấn");
+      return;
     }
 
     try {
-      await navigator.clipboard.writeText(contact.hotline)
-      showMessage('Đã sao chép số tư vấn')
+      await navigator.clipboard.writeText(contact.hotline);
+      showMessage("Đã sao chép số tư vấn");
     } catch {
-      showMessage('Không sao chép được số tư vấn')
+      showMessage("Không sao chép được số tư vấn");
     }
   }
 
   function callNow() {
     if (!contact.hotline) {
-      showMessage('Shop chưa cấu hình số tư vấn')
-      return
+      showMessage("Shop chưa cấu hình số tư vấn");
+      return;
     }
 
     if (!isMobile) {
-      showMessage('Hãy sao chép số tư vấn để gọi trên điện thoại')
-      return
+      showMessage("Hãy sao chép số tư vấn để gọi trên điện thoại");
+      return;
     }
 
-    window.location.href = `tel:${contact.hotline}`
+    window.location.href = `tel:${contact.hotline}`;
   }
 
   return (
@@ -96,7 +96,7 @@ function ContactModal({ open, onClose, shop }) {
           <div>
             <p className="eyebrow">Tư vấn nhanh</p>
             <h2>Liên hệ tư vấn</h2>
-            <p>Chọn kênh phù hợp, Chú Tám sẽ hỗ trợ bạn nhanh nhất.</p>
+            <p>Chọn kênh phù hợp, Nhân Viên sẽ hỗ trợ bạn nhanh nhất.</p>
           </div>
           <button
             type="button"
@@ -121,7 +121,7 @@ function ContactModal({ open, onClose, shop }) {
                 onClick={() =>
                   openExternal(
                     contact.messengerUrl,
-                    'Shop chưa cấu hình Messenger',
+                    "Shop chưa cấu hình Messenger",
                   )
                 }
               >
@@ -138,7 +138,7 @@ function ContactModal({ open, onClose, shop }) {
                 type="button"
                 className="contact-action"
                 onClick={() =>
-                  openExternal(contact.zaloUrl, 'Shop chưa cấu hình Zalo')
+                  openExternal(contact.zaloUrl, "Shop chưa cấu hình Zalo")
                 }
               >
                 <span>
@@ -162,7 +162,7 @@ function ContactModal({ open, onClose, shop }) {
                 <small>
                   {maskedHotline
                     ? `Số tư vấn ${maskedHotline} đã sẵn sàng để sao chép`
-                    : 'Số tư vấn đã sẵn sàng để sao chép'}
+                    : "Số tư vấn đã sẵn sàng để sao chép"}
                 </small>
               </button>
             ) : null}
@@ -171,18 +171,18 @@ function ContactModal({ open, onClose, shop }) {
               <button
                 type="button"
                 className={`contact-action ${
-                  isMobile ? '' : 'contact-action--desktop-call'
+                  isMobile ? "" : "contact-action--desktop-call"
                 }`}
                 onClick={callNow}
               >
                 <span>
                   <Phone size={20} />
                 </span>
-                <strong>{isMobile ? 'Gọi ngay' : 'Gọi trên điện thoại'}</strong>
+                <strong>{isMobile ? "Gọi ngay" : "Gọi trên điện thoại"}</strong>
                 <small>
                   {isMobile
-                    ? 'Mở trình gọi điện trên thiết bị của bạn'
-                    : 'Trên máy tính, hãy sao chép số tư vấn để gọi'}
+                    ? "Mở trình gọi điện trên thiết bị của bạn"
+                    : "Trên máy tính, hãy sao chép số tư vấn để gọi"}
                 </small>
               </button>
             ) : null}
@@ -192,7 +192,7 @@ function ContactModal({ open, onClose, shop }) {
         {message ? <div className="contact-toast">{message}</div> : null}
       </section>
     </div>
-  )
+  );
 }
 
-export default ContactModal
+export default ContactModal;
