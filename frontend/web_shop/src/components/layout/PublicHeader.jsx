@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Bike,
   LogOut,
@@ -8,23 +8,23 @@ import {
   ShoppingCart,
   UserRound,
   Wrench,
-} from 'lucide-react'
-import { useCustomerAuth } from '../../context/customerAuth'
+} from "lucide-react";
+import { useCustomerAuth } from "../../context/customerAuth";
 
 function hasContact(shop) {
   return Boolean(
     shop?.contact?.messengerUrl ||
-      shop?.contact?.zaloUrl ||
-      shop?.contact?.hotline,
-  )
+    shop?.contact?.zaloUrl ||
+    shop?.contact?.hotline,
+  );
 }
 
 function getCustomerLabel(customer) {
-  return customer?.fullName?.split(' ')?.at(-1) || 'Tài khoản'
+  return customer?.fullName?.split(" ")?.at(-1) || "Tài khoản";
 }
 
 function getShopLogoUrl(shop) {
-  return shop?.avatarUrl || shop?.logoUrl || ''
+  return shop?.avatarUrl || shop?.logoUrl || "";
 }
 
 function PublicHeader({
@@ -35,20 +35,20 @@ function PublicHeader({
   onCartOpen,
   onContactOpen,
 }) {
-  const { customer, isAuthenticated, logout } = useCustomerAuth()
-  const [failedLogoUrl, setFailedLogoUrl] = useState('')
-  const logoUrl = getShopLogoUrl(shop)
-  const shouldShowLogo = Boolean(logoUrl && failedLogoUrl !== logoUrl)
+  const { customer, isAuthenticated, logout } = useCustomerAuth();
+  const [failedLogoUrl, setFailedLogoUrl] = useState("");
+  const logoUrl = getShopLogoUrl(shop);
+  const shouldShowLogo = Boolean(logoUrl && failedLogoUrl !== logoUrl);
 
   return (
     <header className="public-header">
       <div className="public-header__inner">
-        <Link className="brand-mark" to={`/shop/${shop?.slug || ''}`}>
+        <Link className="brand-mark" to={`/shop/${shop?.slug || ""}`}>
           <span className="brand-mark__icon">
             {shouldShowLogo ? (
               <img
                 src={logoUrl}
-                alt={shop?.name || 'Shop'}
+                alt={shop?.name || "Shop"}
                 onError={() => setFailedLogoUrl(logoUrl)}
               />
             ) : (
@@ -56,10 +56,7 @@ function PublicHeader({
             )}
           </span>
           <span>
-            <strong>{shop?.name || 'Chú Tám Tân Xe'}</strong>
-            <small>
-              <Bike size={13} /> Phụ tùng xe máy chuyên nghiệp
-            </small>
+            <strong>{shop?.name || "Shop Bán Hàng Uy Tín"}</strong>
           </span>
         </Link>
 
@@ -75,7 +72,10 @@ function PublicHeader({
         <div className="header-actions">
           {isAuthenticated ? (
             <div className="account-menu">
-              <Link className="contact-pill account-pill" to="/customer/account">
+              <Link
+                className="contact-pill account-pill"
+                to="/customer/account"
+              >
                 <UserRound size={17} />
                 {getCustomerLabel(customer)}
               </Link>
@@ -113,7 +113,7 @@ function PublicHeader({
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export default PublicHeader
+export default PublicHeader;
